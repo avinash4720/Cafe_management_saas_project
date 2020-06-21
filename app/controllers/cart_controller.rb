@@ -6,7 +6,7 @@ class CartController < ApplicationController
         items = JSON.parse(cookies[:items])
         totalcost = JSON.parse(cookies[:cost])
         customerName = cookies[:customer]
-        if customerName.empty?
+        if customerName.nil? || customerName.empty? 
             order = Order.create!(
                 cost: totalcost, 
                 date: Date.today, 
