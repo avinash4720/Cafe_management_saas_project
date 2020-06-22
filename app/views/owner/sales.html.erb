@@ -1,3 +1,64 @@
+<script>
+  window.onload = function() {
+    var count =$("body").data("count")
+    var pr =$("body").data("pr")
+    var array = <%= @p.inspect.html_safe %>;
+    var dps=[]
+    for (var i = 0; i < count; i++)
+          {dps.push({x:i+1,y: array[i]});}
+    var chart1 = new CanvasJS.Chart("chartContainer1", {
+        animationEnabled: true,
+        title: {
+            text: "Today's Sale"
+        },
+        axisY: {
+            prefix: "Rs. ",
+            title: "COST"
+        },
+        axisX: {
+            title: "ORDERS"
+        },
+        toolTip: {
+            shared: true
+        },
+        data: [{
+            type: "stackedArea",
+            showInLegend: true,
+            toolTipContent: "<span style=\"color:#4F81BC\"><strong>{name}: </strong></span> {y}",
+            name: "",
+            dataPoints: dps
+        }]
+    });
+
+    var chart2 = new CanvasJS.Chart("chartContainer2", {
+        animationEnabled: true,
+        theme: "light2", // "light1", "light2", "dark1", "dark2"
+        title: {
+            text: "Monthly Sales"
+        },
+        axisY: {
+            title: "Revenue"
+        },
+        data: [{
+            type: "column",
+            showInLegend: true,
+            legendMarkerColor: "grey",
+            legendText: "Month",
+            dataPoints: dps
+        }]
+    });
+    chart1.render();
+    chart2.render();
+
+}
+
+function myfunction() {
+    if (document.getElementById("customers").style.display === "none")
+        document.getElementById("customers").style.display = "block";
+    else
+        document.getElementById("customers").style.display = "none";
+}
+</script>
 <section class="owner">
   <main class="salesdash">
     <style>
@@ -5,6 +66,9 @@
         background-image: url('img_girl.jpg');
       }
     </style>
+    <body data-count = <%= Order.count%>>
+    
+    <body data-pr = <%= @p %>>
     <div class="wrapper">
       <div class="top_navbar">
         <div class="hamburger">
@@ -58,10 +122,7 @@
                 <div id="chartContainer1" style="height: 400px; width: 600px;" ></div>
                 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
             </div>
-            <div class="item-chart">
-                <div id="chartContainer2" style="height: 400px; width: 600px;" ></div>
-                <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-            </div>
+
           </div>
           <div class="container bootstrap snippet" style="margin-top:30px;">
             <div class="row justify-content-center">
